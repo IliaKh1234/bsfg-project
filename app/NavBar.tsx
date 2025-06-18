@@ -81,18 +81,6 @@ const NavBar = () => {
           </ul>
         )}
       </nav>
-
-      {/* Mobile Bottom Bar - Horizontal Scrollable */}
-      <nav className="fixed bottom-0 left-0 right-0 bg-[#162231] flex items-center h-16 md:hidden z-50 overflow-x-auto">
-        <div className="flex flex-nowrap w-full">
-          {navGroups.flatMap((group, groupIdx) => group.items.map((img, idx) => (
-            <div key={`${groupIdx}-${idx}`} className="flex flex-col items-center min-w-[64px] mx-2">
-              <Image src={img} alt={`nav-item-mobile-${groupIdx}-${idx}`} width={24} height={24} />
-              <span className="text-xs text-white">{navGroups[groupIdx].names[idx]}</span>
-            </div>
-          )))}
-        </div>
-      </nav>
     </>
   );
 };
