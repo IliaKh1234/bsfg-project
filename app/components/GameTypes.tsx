@@ -131,8 +131,8 @@ const GameTypes: React.FC<GameTypesProps> = ({ initialGames }) => {
         const res = await fetch(apiUrl);
         const json = await res.json();
         setGames(json.data || []);
-      } catch (_) {
-        // error ignored
+      } catch (err) {
+        console.log(err);
         setGames([]);
       }
     };
