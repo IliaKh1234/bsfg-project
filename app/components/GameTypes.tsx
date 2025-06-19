@@ -1,18 +1,25 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { BiSearchAlt } from "react-icons/bi";
-import Select from "react-select";
+import Select, { OptionProps, SingleValueProps } from "react-select";
 import { useSearchParams, useRouter } from "next/navigation";
 import Image from "next/image";
 
 import Dice from "../images/sidebar_dice.png";
 import Icon from "../images/icon.png";
 import secondIcon from "../images/ts.png";
-import { navGroups } from "../data/NavBarItems";
 import flat from "../images/Flat.png";
+
+import { navGroups } from "../data/NavBarItems";
 import { Game } from "../types/game";
 
-const options = [
+type OptionType = {
+  value: string;
+  label: string;
+  icon: string;
+};
+
+const options: OptionType[] = [
   { value: "Collections", label: "Collections", icon: Icon.src },
   { value: "All Collections", label: "All Collections", icon: Dice.src },
   { value: "Featured", label: "Featured", icon: Dice.src },
@@ -21,7 +28,7 @@ const options = [
   { value: "Fruits", label: "Fruits", icon: Dice.src },
 ];
 
-const secondOptions = [
+const secondOptions: OptionType[] = [
   { value: "All Providers", label: "All Providers", icon: secondIcon.src },
   { value: "Providers", label: "Providers", icon: Dice.src },
   { value: "BGaming", label: "BGaming", icon: Dice.src },
@@ -30,21 +37,24 @@ const secondOptions = [
   { value: "GameBeat", label: "GameBeat", icon: Dice.src },
 ];
 
-const customSingleValue = ({ data }: any) => (
-  <div className="flex items-center gap-2">
-    <Image
-      src={data.icon}
-      alt={data.label}
-      width={20}
-      height={20}
-      className="inline-block"
-      unoptimized
-    />
-    <span>{data.label}</span>
-  </div>
-);
+const customSingleValue = (props: SingleValueProps<OptionType, false>) => {
+  const { data } = props;
+  return (
+    <div className="flex items-center gap-2">
+      <Image
+        src={data.icon}
+        alt={data.label}
+        width={20}
+        height={20}
+        className="inline-block"
+        unoptimized
+      />
+      <span>{data.label}</span>
+    </div>
+  );
+};
 
-const customOption = (props: any) => {
+const customOption = (props: OptionProps<OptionType, false>) => {
   const { data, innerRef, innerProps } = props;
   return (
     <div
@@ -57,7 +67,6 @@ const customOption = (props: any) => {
         alt={data.label}
         width={20}
         height={20}
-        className="inline-block"
         unoptimized
       />
       <span className="text-white">{data.label}</span>
@@ -96,15 +105,17 @@ const GameTypes: React.FC<GameTypesProps> = ({ initialGames }) => {
     setSearch(querySearch);
     setActiveCategory(queryCategory);
 
-    const categoryOption = options.find(
-      (opt) => opt.value.toLowerCase() === queryCategory.toLowerCase()
-    );
-    setSelectedCategoryOption(categoryOption || options[0]);
+    const categoryOption =
+      options.find(
+        (opt) => opt.value.toLowerCase() === queryCategory.toLowerCase()
+      ) || options[0];
+    setSelectedCategoryOption(categoryOption);
 
-    const providerOption = secondOptions.find(
-      (opt) => opt.value.toLowerCase() === queryProvider.toLowerCase()
-    );
-    setSelectedProviderOption(providerOption || secondOptions[0]);
+    const providerOption =
+      secondOptions.find(
+        (opt) => opt.value.toLowerCase() === queryProvider.toLowerCase()
+      ) || secondOptions[0];
+    setSelectedProviderOption(providerOption);
   }, [searchParams]);
 
   useEffect(() => {
@@ -184,7 +195,7 @@ const GameTypes: React.FC<GameTypesProps> = ({ initialGames }) => {
 
   return (
     <>
-      {/* Search bar and selects */}
+      {/* Search and filter */}
       <div className="flex flex-col items-center mt-5 space-y-4 w-full">
         <div className="flex flex-col sm:flex-row items-center gap-4 w-full max-w-[66%] mx-auto">
           <div className="flex items-center bg-[#1b2636] rounded-md px-3 py-2 border border-[#273344] flex-1">
@@ -205,7 +216,7 @@ const GameTypes: React.FC<GameTypesProps> = ({ initialGames }) => {
           </div>
 
           <div className="hidden lg:block w-[200px]">
-            <Select
+            <Select<OptionType, false>
               options={options}
               value={selectedCategoryOption}
               onChange={(option) => {
@@ -240,7 +251,7 @@ const GameTypes: React.FC<GameTypesProps> = ({ initialGames }) => {
           </div>
 
           <div className="hidden lg:block w-[200px]">
-            <Select
+            <Select<OptionType, false>
               options={secondOptions}
               value={selectedProviderOption}
               onChange={(option) => {
@@ -300,7 +311,7 @@ const GameTypes: React.FC<GameTypesProps> = ({ initialGames }) => {
                     label === "Lobby"
                       ? flat.src
                       : allItems.find((i) => i.label === label)?.img.src;
-                  if (!imgSrc) return null; // skip rendering Image if no src
+                  if (!imgSrc) return null;
 
                   return (
                     <Image
@@ -320,7 +331,7 @@ const GameTypes: React.FC<GameTypesProps> = ({ initialGames }) => {
         </div>
       </div>
 
-      {/* Games list by categories */}
+      {/* Games display */}
       <div className="flex flex-col space-y-8 max-w-[67%] m-auto">
         {categoriesToShow.map(({ key, label }) => {
           const gamesInCategory = games?.filter((game) =>
