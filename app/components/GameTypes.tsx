@@ -30,7 +30,7 @@ const secondOptions = [
 ];
 
 const customSingleValue = ({ data }: any) => (
-  <div className="flex items-center gap-2 mb-[20px]">
+  <div className="flex items-center gap-2">
     <img src={data.icon} alt={data.label} className="w-5 h-5" />
     <span>{data.label}</span>
   </div>
@@ -55,12 +55,11 @@ interface GameTypesProps {
 }
 
 const GameTypes: React.FC<GameTypesProps> = ({ initialGames }) => {
+  const [hasMounted, setHasMounted] = useState(false);
   const router = useRouter();
   const searchParams = useSearchParams();
 
   const [games, setGames] = useState<Game[]>(initialGames);
-
-  // Controlled state for filters
   const [search, setSearch] = useState("");
   const [activeCategory, setActiveCategory] = useState("");
   const [selectedCategoryOption, setSelectedCategoryOption] = useState(
@@ -70,7 +69,10 @@ const GameTypes: React.FC<GameTypesProps> = ({ initialGames }) => {
     secondOptions[0]
   );
 
-  // Sync React state from URL search params when URL changes
+  useEffect(() => {
+    setHasMounted(true);
+  }, []);
+
   useEffect(() => {
     const querySearch = searchParams.get("search") || "";
     const queryCategory = searchParams.get("category") || "";
@@ -90,16 +92,15 @@ const GameTypes: React.FC<GameTypesProps> = ({ initialGames }) => {
     setSelectedProviderOption(providerOption || secondOptions[0]);
   }, [searchParams]);
 
-  // Fetch games whenever filters change
   useEffect(() => {
     const fetchGames = async () => {
-      const searchParam = search ? `&search=${encodeURIComponent(search)}` : "";
+      const searchParam =
+        search.length >= 3 ? `&search=${encodeURIComponent(search)}` : "";
       const categoryParam = activeCategory
         ? `&category=${encodeURIComponent(activeCategory)}`
         : "";
       const providerParam =
-        selectedProviderOption &&
-        selectedProviderOption.value !== "All Providers"
+        selectedProviderOption?.value !== "All Providers"
           ? `&provider=${encodeURIComponent(selectedProviderOption.value)}`
           : "";
 
@@ -109,7 +110,7 @@ const GameTypes: React.FC<GameTypesProps> = ({ initialGames }) => {
         const res = await fetch(apiUrl);
         const json = await res.json();
         setGames(json.data || []);
-      } catch (err) {
+      } catch {
         setGames([]);
       }
     };
@@ -117,11 +118,10 @@ const GameTypes: React.FC<GameTypesProps> = ({ initialGames }) => {
     fetchGames();
   }, [search, activeCategory, selectedProviderOption]);
 
-  // Update URL query params helper
   const updateURL = ({
-    search: newSearch,
-    category: newCategory,
-    provider: newProvider,
+    search,
+    category,
+    provider,
   }: {
     search?: string;
     category?: string;
@@ -129,37 +129,18 @@ const GameTypes: React.FC<GameTypesProps> = ({ initialGames }) => {
   }) => {
     const params = new URLSearchParams(searchParams.toString());
 
-    if (newSearch !== undefined) {
-      if (newSearch) {
-        params.set("search", newSearch);
-      } else {
-        params.delete("search");
-      }
-    }
-    if (newCategory !== undefined) {
-      if (newCategory) {
-        params.set("category", newCategory);
-      } else {
-        params.delete("category");
-      }
-    }
-    if (newProvider !== undefined) {
-      if (newProvider) {
-        params.set("provider", newProvider);
-      } else {
-        params.delete("provider");
-      }
-    }
+    if (search !== undefined)
+      search ? params.set("search", search) : params.delete("search");
+    if (category !== undefined)
+      category ? params.set("category", category) : params.delete("category");
+    if (provider !== undefined)
+      provider ? params.set("provider", provider) : params.delete("provider");
 
     router.push("?" + params.toString());
   };
 
-  // Prepare nav items and filters
   const allItems = navGroups.flatMap((group) =>
-    group.items.map((img, idx) => ({
-      img,
-      label: group.names[idx],
-    }))
+    group.items.map((img, idx) => ({ img, label: group.names[idx] }))
   );
 
   const selectedLabels = [
@@ -176,10 +157,6 @@ const GameTypes: React.FC<GameTypesProps> = ({ initialGames }) => {
     "Bonus Buy",
   ];
 
-  const filteredItems = allItems.filter((item) =>
-    selectedLabels.includes(item.label)
-  );
-
   const categoriesToShow = [
     { key: "featured-games", label: "Featured Games" },
     { key: "new-releases", label: "New Releases" },
@@ -188,12 +165,13 @@ const GameTypes: React.FC<GameTypesProps> = ({ initialGames }) => {
     { key: "live-games", label: "Live Games" },
   ];
 
+  if (!hasMounted) return null;
+
   return (
     <>
-      {/* Search & Selects */}
       <div className="flex flex-col items-center mt-5 space-y-4 w-full">
         <div className="flex flex-col sm:flex-row items-center gap-4 w-full max-w-[66%] mx-auto">
-          <div className="flex items-center bg-[#1b2636] rounded-md px-3 py-2 border border-[#273344] flex-1 min-w-0 w-full">
+          <div className="flex items-center bg-[#1b2636] rounded-md px-3 py-2 border border-[#273344] flex-1">
             <BiSearchAlt className="text-[#B5BCD7] text-xl mr-2" />
             <input
               type="text"
@@ -204,15 +182,12 @@ const GameTypes: React.FC<GameTypesProps> = ({ initialGames }) => {
                 setSearch(val);
                 if (val.length >= 3 || val.length === 0) {
                   updateURL({ search: val });
-                } else {
-                  return null;
                 }
               }}
               className="bg-transparent outline-none text-[#B5BCD7] placeholder-[#7ca2c8] w-full h-[60px]"
             />
           </div>
 
-          {/* Category select */}
           <div className="hidden lg:block w-[200px]">
             <Select
               options={options}
@@ -237,25 +212,17 @@ const GameTypes: React.FC<GameTypesProps> = ({ initialGames }) => {
                   color: "#fff",
                   boxShadow: "none",
                 }),
-                menu: (base) => ({
-                  ...base,
-                  backgroundColor: "#1b2636",
-                }),
-                menuList: (base) => ({
-                  ...base,
-                  backgroundColor: "#1b2636",
-                }),
+                menu: (base) => ({ ...base, backgroundColor: "#1b2636" }),
+                menuList: (base) => ({ ...base, backgroundColor: "#1b2636" }),
                 option: (base, state) => ({
                   ...base,
                   backgroundColor: state.isFocused ? "#273344" : "#1b2636",
                   color: "white",
-                  cursor: "pointer",
                 }),
               }}
             />
           </div>
 
-          {/* Provider select */}
           <div className="hidden lg:block w-[200px]">
             <Select
               options={secondOptions}
@@ -279,48 +246,38 @@ const GameTypes: React.FC<GameTypesProps> = ({ initialGames }) => {
                   color: "#fff",
                   boxShadow: "none",
                 }),
-                menu: (base) => ({
-                  ...base,
-                  backgroundColor: "#1b2636",
-                }),
-                menuList: (base) => ({
-                  ...base,
-                  backgroundColor: "#1b2636",
-                }),
+                menu: (base) => ({ ...base, backgroundColor: "#1b2636" }),
+                menuList: (base) => ({ ...base, backgroundColor: "#1b2636" }),
                 option: (base, state) => ({
                   ...base,
                   backgroundColor: state.isFocused ? "#273344" : "#1b2636",
                   color: "white",
-                  cursor: "pointer",
                 }),
               }}
             />
           </div>
         </div>
 
-        {/* Category filters */}
         <div className="w-[700px] overflow-x-auto mt-8 lg:w-full">
-          <div className="flex gap-4 px-4 py-2 items-center sm:justify-center sm:flex-wrap ">
+          <div className="flex gap-4 px-4 py-2 items-center sm:justify-center sm:flex-wrap">
             {["Lobby", ...selectedLabels].map((label) => (
               <div
                 key={label}
                 onClick={() => {
                   if (label === "Lobby") {
                     setActiveCategory("");
-                    updateURL({ category: "", search: "" });
                     setSearch("");
+                    updateURL({ category: "", search: "" });
                   } else {
                     setActiveCategory(label);
                     updateURL({ category: label });
                   }
                 }}
-                className={`flex items-center cursor-pointer px-[15px] py-[10px] gap-1
-                  ${
-                    activeCategory === label
-                      ? "bg-[#0F70DC] text-white"
-                      : "bg-[#223444] text-[#B5BCD7]"
-                  }
-                  hover:text-white min-w-fit rounded`}
+                className={`flex items-center cursor-pointer px-[15px] py-[10px] gap-1 ${
+                  activeCategory === label
+                    ? "bg-[#0F70DC] text-white"
+                    : "bg-[#223444] text-[#B5BCD7]"
+                } hover:text-white min-w-fit rounded`}
               >
                 <img
                   src={
@@ -338,20 +295,18 @@ const GameTypes: React.FC<GameTypesProps> = ({ initialGames }) => {
         </div>
       </div>
 
-      {/* Games */}
       <div className="flex flex-col space-y-8 max-w-[67%] m-auto">
         {categoriesToShow.map(({ key, label }) => {
           const gamesInCategory = games?.filter((game) =>
             game.categories.includes(key)
           );
-
-          if (gamesInCategory?.length === 0) return null;
+          if (!gamesInCategory?.length) return null;
 
           return (
             <div key={key}>
               <h1 className="text-2xl font-bold mb-4 text-white">{label}</h1>
               <div className="flex flex-wrap gap-4">
-                {gamesInCategory?.map((game) => (
+                {gamesInCategory.map((game) => (
                   <div
                     key={game.id}
                     className="w-40 relative group cursor-pointer"
