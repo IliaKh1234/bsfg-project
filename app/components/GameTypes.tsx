@@ -1,11 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { BiSearchAlt } from "react-icons/bi";
-import Select, {
-  SingleValue,
-  OptionProps,
-  SingleValueProps,
-} from "react-select";
+import Select, { OptionProps, SingleValueProps } from "react-select";
 import { useSearchParams, useRouter } from "next/navigation";
 import Image from "next/image";
 
@@ -135,7 +131,7 @@ const GameTypes: React.FC<GameTypesProps> = ({ initialGames }) => {
         const res = await fetch(apiUrl);
         const json = await res.json();
         setGames(json.data || []);
-      } catch (_err) {
+      } catch (_) {
         // error ignored
         setGames([]);
       }
@@ -311,7 +307,7 @@ const GameTypes: React.FC<GameTypesProps> = ({ initialGames }) => {
                     label === "Lobby"
                       ? flat.src
                       : allItems.find((i) => i.label === label)?.img.src;
-                  if (!imgSrc) return null; // skip rendering Image if no src
+                  if (!imgSrc) return null;
 
                   return (
                     <Image
