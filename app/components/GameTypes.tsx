@@ -295,17 +295,24 @@ const GameTypes: React.FC<GameTypesProps> = ({ initialGames }) => {
                     : "bg-[#223444] text-[#B5BCD7]"
                 } hover:text-white min-w-fit rounded`}
               >
-                <Image
-                  src={
+                {(() => {
+                  const imgSrc =
                     label === "Lobby"
                       ? flat.src
-                      : allItems.find((i) => i.label === label)?.img.src
-                  }
-                  alt={label}
-                  width={15}
-                  height={15}
-                  unoptimized
-                />
+                      : allItems.find((i) => i.label === label)?.img.src;
+                  if (!imgSrc) return null; // skip rendering Image if no src
+
+                  return (
+                    <Image
+                      src={imgSrc}
+                      alt={label}
+                      width={15}
+                      height={15}
+                      unoptimized
+                    />
+                  );
+                })()}
+
                 <span className="text-xs whitespace-nowrap">{label}</span>
               </div>
             ))}
