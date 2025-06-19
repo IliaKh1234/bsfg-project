@@ -159,8 +159,9 @@ const GameTypes: React.FC<GameTypesProps> = ({ initialGames }) => {
       provider ? params.set("provider", provider) : params.delete("provider");
 
     router.push("?" + params.toString());
-  };
+  }; // ✅ no extra expression after this line
 
+  // ✅ Clean — no expression like `updateURL;` after this
   const allItems = navGroups.flatMap((group) =>
     group.items.map((img, idx) => ({ img, label: group.names[idx] }))
   );
