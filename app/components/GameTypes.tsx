@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { BiSearchAlt } from "react-icons/bi";
 import Select from "react-select";
 import { useSearchParams, useRouter } from "next/navigation";
+import Image from "next/image";
 
 import Dice from "../images/sidebar_dice.png";
 import Icon from "../images/icon.png";
@@ -25,13 +26,20 @@ const secondOptions = [
   { value: "Providers", label: "Providers", icon: Dice.src },
   { value: "BGaming", label: "BGaming", icon: Dice.src },
   { value: "Pragmatic Play", label: "Pragmatic Play", icon: Dice.src },
-  { value: "Big TIme gaming", label: "Big Time Gaming", icon: Dice.src },
-  { value: "game beat", label: "GameBeat", icon: Dice.src },
+  { value: "Big Time Gaming", label: "Big Time Gaming", icon: Dice.src },
+  { value: "GameBeat", label: "GameBeat", icon: Dice.src },
 ];
 
 const customSingleValue = ({ data }: any) => (
   <div className="flex items-center gap-2">
-    <img src={data.icon} alt={data.label} className="w-5 h-5" />
+    <Image
+      src={data.icon}
+      alt={data.label}
+      width={20}
+      height={20}
+      className="inline-block"
+      unoptimized
+    />
     <span>{data.label}</span>
   </div>
 );
@@ -44,12 +52,18 @@ const customOption = (props: any) => {
       {...innerProps}
       className="flex items-center gap-2 px-4 py-2 hover:bg-[#273344] cursor-pointer"
     >
-      <img src={data.icon} alt={data.label} className="w-5 h-5" />
+      <Image
+        src={data.icon}
+        alt={data.label}
+        width={20}
+        height={20}
+        className="inline-block"
+        unoptimized
+      />
       <span className="text-white">{data.label}</span>
     </div>
   );
 };
-
 interface GameTypesProps {
   initialGames: Game[];
 }
@@ -279,14 +293,17 @@ const GameTypes: React.FC<GameTypesProps> = ({ initialGames }) => {
                     : "bg-[#223444] text-[#B5BCD7]"
                 } hover:text-white min-w-fit rounded`}
               >
-                <img
+                <Image
                   src={
                     label === "Lobby"
                       ? flat.src
-                      : allItems.find((i) => i.label === label)?.img.src
+                      : allItems.find((i) => i.label === label)?.img.src || ""
                   }
-                  className="w-[15px] h-[15px]"
                   alt={label}
+                  width={15}
+                  height={15}
+                  className="inline-block"
+                  unoptimized
                 />
                 <span className="text-xs whitespace-nowrap">{label}</span>
               </div>
@@ -311,10 +328,13 @@ const GameTypes: React.FC<GameTypesProps> = ({ initialGames }) => {
                     key={game.id}
                     className="w-40 relative group cursor-pointer"
                   >
-                    <img
+                    <Image
                       src={game.image}
                       alt={game.name}
-                      className="w-full h-auto rounded"
+                      width={160}
+                      height={90}
+                      className="rounded"
+                      unoptimized
                     />
                     <div className="absolute inset-0 bg-black bg-opacity-60 opacity-0 group-hover:opacity-80 flex flex-col items-center justify-center rounded transition-opacity duration-300 px-2">
                       <p className="text-white text-center font-semibold">
