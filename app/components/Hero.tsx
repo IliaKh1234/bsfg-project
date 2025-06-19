@@ -1,5 +1,6 @@
 "use client";
 import React, { useState } from "react";
+import Image from "next/image";
 
 import firstHero from "../images/hero1.png";
 import secondHero from "../images/hero2.png";
@@ -28,15 +29,17 @@ const Hero = () => {
     <div className="flex flex-col items-center gap-6 mt-4 w-full">
       {/* Top Two Images */}
       <div className="flex flex-wrap justify-center gap-4 w-full">
-        <img
-          className=" md:w-[595px] h-auto md:h-[300px] object-contain"
-          src={heroImages[0].src}
+        <Image
+          className="md:w-[595px] h-auto md:h-[300px] object-contain"
+          src={heroImages[0]}
           alt="hero 1"
+          unoptimized
         />
-        <img
-          className=" md:w-[595px] h-auto md:h-[300px] object-contain"
-          src={heroImages[1].src}
+        <Image
+          className="md:w-[595px] h-auto md:h-[300px] object-contain"
+          src={heroImages[1]}
           alt="hero 2"
+          unoptimized
         />
       </div>
 
@@ -55,40 +58,46 @@ const Hero = () => {
       </div>
 
       <div className="flex flex-wrap justify-center gap-4 w-full">
-        <img
-          className=" md:w-[400px] h-auto md:h-[250px] object-contain"
-          src={heroImages[2].src}
+        <Image
+          className="md:w-[400px] h-auto md:h-[250px] object-contain"
+          src={heroImages[2]}
           alt="hero 3"
+          unoptimized
         />
-        <img
-          className=" md:w-[400px] h-auto md:h-[250px] object-contain"
-          src={heroImages[3].src}
+        <Image
+          className="md:w-[400px] h-auto md:h-[250px] object-contain"
+          src={heroImages[3]}
           alt="hero 4"
+          unoptimized
         />
 
         <div className="flex flex-wrap gap-4">
           <div className="flex flex-col gap-2">
-            <img
+            <Image
               className="w-[48vw] md:w-[185px] h-auto md:h-[120px] object-contain"
-              src={heroImages[4].src}
+              src={heroImages[4]}
               alt="hero 5"
+              unoptimized
             />
-            <img
+            <Image
               className="w-[48vw] md:w-[185px] h-auto md:h-[120px] object-contain"
-              src={heroImages[5].src}
+              src={heroImages[5]}
               alt="hero 6"
+              unoptimized
             />
           </div>
           <div className="flex flex-col gap-2">
-            <img
+            <Image
               className="w-[48vw] md:w-[185px] h-auto md:h-[120px] object-contain"
-              src={heroImages[6].src}
+              src={heroImages[6]}
               alt="hero 7"
+              unoptimized
             />
-            <img
+            <Image
               className="w-[48vw] md:w-[185px] h-auto md:h-[120px] object-contain"
-              src={heroImages[7].src}
+              src={heroImages[7]}
               alt="hero 8"
+              unoptimized
             />
           </div>
         </div>
