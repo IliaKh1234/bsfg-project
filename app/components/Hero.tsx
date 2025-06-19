@@ -30,15 +30,19 @@ const Hero = () => {
       {/* Top Two Images */}
       <div className="flex flex-wrap justify-center gap-4 w-full">
         <Image
-          className="md:w-[595px] h-auto md:h-[300px] object-contain"
           src={heroImages[0]}
           alt="hero 1"
+          width={595}
+          height={300}
+          className="object-contain"
           unoptimized
         />
         <Image
-          className="md:w-[595px] h-auto md:h-[300px] object-contain"
           src={heroImages[1]}
           alt="hero 2"
+          width={595}
+          height={300}
+          className="object-contain"
           unoptimized
         />
       </div>
@@ -59,44 +63,56 @@ const Hero = () => {
 
       <div className="flex flex-wrap justify-center gap-4 w-full">
         <Image
-          className="md:w-[400px] h-auto md:h-[250px] object-contain"
           src={heroImages[2]}
           alt="hero 3"
+          width={400}
+          height={250}
+          className="object-contain"
           unoptimized
         />
         <Image
-          className="md:w-[400px] h-auto md:h-[250px] object-contain"
           src={heroImages[3]}
           alt="hero 4"
+          width={400}
+          height={250}
+          className="object-contain"
           unoptimized
         />
 
         <div className="flex flex-wrap gap-4">
           <div className="flex flex-col gap-2">
             <Image
-              className="w-[48vw] md:w-[185px] h-auto md:h-[120px] object-contain"
               src={heroImages[4]}
               alt="hero 5"
+              width={185}
+              height={120}
+              className="object-contain"
               unoptimized
             />
             <Image
-              className="w-[48vw] md:w-[185px] h-auto md:h-[120px] object-contain"
               src={heroImages[5]}
               alt="hero 6"
+              width={185}
+              height={120}
+              className="object-contain"
               unoptimized
             />
           </div>
           <div className="flex flex-col gap-2">
             <Image
-              className="w-[48vw] md:w-[185px] h-auto md:h-[120px] object-contain"
               src={heroImages[6]}
               alt="hero 7"
+              width={185}
+              height={120}
+              className="object-contain"
               unoptimized
             />
             <Image
-              className="w-[48vw] md:w-[185px] h-auto md:h-[120px] object-contain"
               src={heroImages[7]}
               alt="hero 8"
+              width={185}
+              height={120}
+              className="object-contain"
               unoptimized
             />
           </div>

@@ -2,7 +2,7 @@ import React from "react";
 import { LuDollarSign, LuBellRing } from "react-icons/lu";
 import { FaRegUserCircle } from "react-icons/fa";
 
-const Header = ({}: { sidebarOpen: boolean }) => {
+const Header = () => {
   return (
     <div className="header bg-[#152535] w-full flex items-center">
       <div className="flex items-center justify-around w-[99%] ">

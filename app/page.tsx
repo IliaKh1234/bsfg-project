@@ -17,7 +17,7 @@ export const fetchGames = async (): Promise<Game[]> => {
 export default function Home({ games }: HomeProps) {
   return (
     <>
-      <Header sidebarOpen={false} />
+      <Header />
       <Hero />
       <GameTypes initialGames={games} /> {/* ✅ pass SSR games */}
     </>
