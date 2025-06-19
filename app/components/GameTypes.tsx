@@ -151,12 +151,29 @@ const GameTypes: React.FC<GameTypesProps> = ({ initialGames }) => {
   }) => {
     const params = new URLSearchParams(searchParams.toString());
 
-    if (search !== undefined)
-      search ? params.set("search", search) : params.delete("search");
-    if (category !== undefined)
-      category ? params.set("category", category) : params.delete("category");
-    if (provider !== undefined)
-      provider ? params.set("provider", provider) : params.delete("provider");
+    if (search !== undefined) {
+      if (search) {
+        params.set("search", search);
+      } else {
+        params.delete("search");
+      }
+    }
+
+    if (category !== undefined) {
+      if (category) {
+        params.set("category", category);
+      } else {
+        params.delete("category");
+      }
+    }
+
+    if (provider !== undefined) {
+      if (provider) {
+        params.set("provider", provider);
+      } else {
+        params.delete("provider");
+      }
+    }
 
     router.push("?" + params.toString());
   }; // ✅ no extra expression after this line
