@@ -64,6 +64,7 @@ const customOption = (props: any) => {
     </div>
   );
 };
+
 interface GameTypesProps {
   initialGames: Game[];
 }
@@ -183,6 +184,7 @@ const GameTypes: React.FC<GameTypesProps> = ({ initialGames }) => {
 
   return (
     <>
+      {/* Search bar and selects */}
       <div className="flex flex-col items-center mt-5 space-y-4 w-full">
         <div className="flex flex-col sm:flex-row items-center gap-4 w-full max-w-[66%] mx-auto">
           <div className="flex items-center bg-[#1b2636] rounded-md px-3 py-2 border border-[#273344] flex-1">
@@ -297,12 +299,11 @@ const GameTypes: React.FC<GameTypesProps> = ({ initialGames }) => {
                   src={
                     label === "Lobby"
                       ? flat.src
-                      : allItems.find((i) => i.label === label)?.img.src || ""
+                      : allItems.find((i) => i.label === label)?.img.src
                   }
                   alt={label}
                   width={15}
                   height={15}
-                  className="inline-block"
                   unoptimized
                 />
                 <span className="text-xs whitespace-nowrap">{label}</span>
@@ -312,6 +313,7 @@ const GameTypes: React.FC<GameTypesProps> = ({ initialGames }) => {
         </div>
       </div>
 
+      {/* Games list by categories */}
       <div className="flex flex-col space-y-8 max-w-[67%] m-auto">
         {categoriesToShow.map(({ key, label }) => {
           const gamesInCategory = games?.filter((game) =>
