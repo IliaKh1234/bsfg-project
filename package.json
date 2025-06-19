@@ -12,12 +12,18 @@
     "@fortawesome/fontawesome-svg-core": "^6.7.2",
     "@fortawesome/free-solid-svg-icons": "^6.7.2",
     "@fortawesome/react-fontawesome": "^0.2.2",
+    "@headlessui/react": "^2.2.4",
+    "@heroui/dropdown": "^2.3.21",
+    "@heroui/system": "^2.4.17",
+    "@heroui/theme": "^2.4.17",
     "@tailwindcss/vite": "^4.1.10",
+    "framer-motion": "^12.18.1",
     "lucide-react": "^0.517.0",
     "next": "15.3.3",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
-    "react-icons": "^5.5.0"
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "react-icons": "^5.5.0",
+    "react-select": "^5.10.1"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
